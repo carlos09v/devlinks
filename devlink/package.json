@@ -1,0 +1,38 @@
+{
+  "name": "devlink",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "firebase": "^9.14.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-icons": "^4.6.0",
+    "react-router-dom": "^6.4.3",
+    "react-toastify": "^9.1.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.24",
+    "@types/react-dom": "^18.0.8",
+    "@vitejs/plugin-react": "^2.2.0",
+    "typescript": "^4.6.4",
+    "vite": "^3.2.3"
+  },
+  "_commands": {
+    "0": "npm create vite@latest",
+    "1": "npm i",
+    "2": "npm i react-router-dom",
+    "3": "npm i react-icons",
+    "4": "npm i firebase",
+    "5": "npm i react-toastify"
+  },
+  "_comments": {
+    "4": "Plataforma digital de desenvolvimento de aplicativos lançada pelo Google. Com ela, é possível criar e expandir apps com muita simplicidade, agilidade e facilidade para Android, iOS e para a Web.",
+    "5": "Lib de Alertas"
+  }
+}
