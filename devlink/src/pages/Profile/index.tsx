@@ -1,7 +1,7 @@
 import './Profile.css'
 import { useEffect, useState } from 'react'
 import { FiTrash2 } from 'react-icons/fi'
-import {query, orderBy, doc, deleteDoc, collection, getDoc, onSnapshot} from 'firebase/firestore' 
+import {query, orderBy, doc, deleteDoc, collection, getDoc, onSnapshot, limit} from 'firebase/firestore' 
 import { db } from '../../services/firebaseConnection'
 
 import HeaderAdmin from '../../components/HeaderAdmin'
@@ -24,9 +24,9 @@ const Profile = () => {
         }
 
         const linksRef = collection(db, "links");
-        const queryRef = query(linksRef, orderBy("created", "asc"));
+        const queryRef = query(linksRef, orderBy("created", "asc"), limit(7));
 
-        // Get Data Links
+        // Wacth Data Links
         onSnapshot(queryRef, (snapshot) => {
             let lista: any = [];
 
