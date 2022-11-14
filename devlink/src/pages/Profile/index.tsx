@@ -1,7 +1,7 @@
 import './Profile.css'
 import { useEffect, useState } from 'react'
 import { FiTrash2 } from 'react-icons/fi'
-import {query, orderBy, doc, deleteDoc, collection, getDoc, getDocs} from 'firebase/firestore' 
+import {query, orderBy, doc, deleteDoc, collection, getDoc, onSnapshot} from 'firebase/firestore' 
 import { db } from '../../services/firebaseConnection'
 
 import HeaderAdmin from '../../components/HeaderAdmin'
@@ -27,24 +27,22 @@ const Profile = () => {
         const queryRef = query(linksRef, orderBy("created", "asc"));
 
         // Get Data Links
-        getDocs(queryRef)
-            .then((snapshot) => {
-                let lista: any = [];
+        onSnapshot(queryRef, (snapshot) => {
+            let lista: any = [];
 
-                snapshot.forEach((doc: any) => {
-                    lista.push({
-                        id: doc.id,
-                        name: doc.data().name,
-                        url: doc.data().url,
-                        bg: doc.data().bg,
-                        color: doc.data().color
-                    })
+            snapshot.forEach((doc: any) => {
+                lista.push({
+                    id: doc.id,
+                    name: doc.data().name,
+                    url: doc.data().url,
+                    bg: doc.data().bg,
+                    color: doc.data().color
                 })
-
-                setLinks(lista)
             })
 
-
+            setLinks(lista)
+        })
+            
         const docRef = doc(db, 'info-user', 'info')
         getDoc(docRef).then(snapshot => {
             if(snapshot.data()) setInfoUser(snapshot.data())

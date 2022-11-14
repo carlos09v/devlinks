@@ -76,3 +76,182 @@ footer {
         font-size: .8em;
     }
 }
+
+
+/* ------- LINKS -------- */
+/* By: https://github.com/alexrla */
+.link {
+    border-radius: 5px;
+
+    cursor: pointer;
+
+    margin-bottom: 22px;
+
+    padding: 12px 0;
+
+    user-select: none;
+
+    transition: background-color, transform .4s;
+
+    width: 100%;
+}
+
+.link:nth-child(1) {
+    background-color: #E34F0D;
+}
+
+.link:nth-child(2) {
+    background-color: #1D66C2;
+}
+
+.link:nth-child(3)   {
+    background-color: #166FE5;
+}
+
+.link:nth-child(4)   {
+    background-color: #47A2F2;
+}
+
+.link:nth-child(5) {
+    background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%,#d6249f 60%,#285AEB 90%);
+}
+
+.link:nth-child(6) {
+    background-color: #9764FE;
+}
+
+.link:nth-child(7) {
+    background-color: #E35023;
+}
+
+.link:nth-child(8) {
+    background-color: #7EDB61;
+}
+
+.link:nth-child(9) {
+    background-color: #56B0E2;
+}
+
+.link:nth-child(10) {
+    background-color: #84E569;
+}
+
+.link:nth-child(11) {
+    background-color: #7289D9;
+}
+
+.link:nth-child(12) {
+    background-color: #62666B;
+}
+
+.link:nth-child(13) {
+    background-color: #464749;
+}
+
+.link:nth-child(14) {
+    background-color: #E56839;
+}
+
+.link:nth-child(15) {
+    background-color: #EB910F;
+}
+
+.link:nth-child(16) {
+    background-color: #7C3A84;
+}
+
+.link:nth-child(17) {
+    background-color: #2D699B;
+}
+
+.link_title {
+    color: #FFF;
+
+    font-size: 18px;
+
+    font-weight: bold;
+
+    position: relative;
+}
+
+.link_title i {
+    bottom: -2px;
+
+    font-size: 20px;
+
+    position: absolute;
+
+    right: 20px;
+}
+
+.link:hover {
+    transform: scale(1.05);
+}
+
+.link:nth-child(1):hover {
+    background-color: #B22222;
+}
+
+.link:nth-child(2):hover {
+    background-color: #245A8A;
+}
+
+.link:nth-child(3):hover {
+    background-color: #3B5997;
+}
+
+.link:nth-child(4):hover {
+    background-color: #429CF0;
+}
+
+/* .link:nth-child(5):hover {
+    background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%,#d6249f 60%,#285AEB 90%);
+} */
+
+.link:nth-child(6):hover {
+    background-color: #6243A4;
+}
+
+.link:nth-child(7):hover {
+    background-color: #CF470B;
+}
+
+.link:nth-child(8):hover {
+    background-color: #6BBB54;
+}
+
+.link:nth-child(9):hover {
+    background-color: #4FA6E0;
+}
+
+.link:nth-child(10):hover {
+    background-color: #71C33C;
+}
+
+.link:nth-child(11):hover {
+    background-color: #5865F2;
+}
+
+.link:nth-child(12):hover {
+    background-color: #313131;
+}
+
+.link:nth-child(13):hover {
+    background-color: #313131;
+}
+
+.link:nth-child(14):hover {
+    background-color: #E34F0D;
+}
+
+.link:nth-child(15):hover {
+    background-color: #E87D24;
+}
+
+.link:nth-child(16):hover {
+    background-color: #4B1F4B;
+}
+
+.link:nth-child(17):hover {
+    background-color: #1E5080;
+}

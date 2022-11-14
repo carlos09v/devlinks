@@ -66,33 +66,128 @@ const Home = () => {
             <Header />
 
             <h1>Gerador de Links</h1>
-            <h2 className='title'>Veja meus links abaixo 👇</h2>
+            <h2 className='title'>Veja os exemplos de links abaixo 👇</h2>
 
             <main className='links'>
-
-                {links.map((item: any) => (
-                    <section key={item.id} className='link-area' style={{ backgroundColor: item.bg }}>
-                        <a href={item.url} target='_blank'>
-                            <p className='link-text' style={{ color: item.color }}>{item.name}</p>
-                        </a>
-                    </section>
-                ))}
-
-                {links.length !== 0 && Object.keys(socialLinks).length > 0 && (
-                    <footer>
-                        <Social url={socialLinks?.instagram}>
-                            <FaInstagram size={35} color='white' />
-                        </Social>
-
-                        <Social url={socialLinks?.twitter}>
-                            <FaTwitter size={35} color='white' />
-                        </Social>
-
-                        <Social url={socialLinks?.gitHub}>
-                            <FaGithub size={35} color='white' />
-                        </Social>
-                    </footer>
-                )}
+                <section className='link'>
+                    <a href="https://www.youtube.com/">
+                        <p className='link_title'>
+                            Youtube
+                        </p>
+                    </a>
+                </section>
+                <section className='link'>
+                    <a href="https://www.youtube.com/">
+                        <p className='link_title'>
+                            Linkedin
+                        </p>
+                    </a>
+                </section>
+                <section className='link'>
+                    <a href="https://www.facebook.com/">
+                        <p className='link_title'>
+                            Facebook
+                        </p>
+                    </a>
+                </section>
+                <section className='link'>
+                    <a href="https://twitter.com/">
+                        <p className='link_title'>
+                            Twitter
+                        </p>
+                    </a>
+                </section>
+                <section className='link'>
+                    <a href="https://www.instagram.com/">
+                        <p className='link_title'>
+                            Instagram
+                        </p>
+                    </a>
+                </section>
+                <section className='link'>
+                    <a href="https://www.twitch.tv/">
+                        <p className='link_title'>
+                            Twitch
+                        </p>
+                    </a>
+                </section>
+                <section className='link'>
+                    <a href="https://br.pinterest.com/">
+                        <p className='link_title'>
+                            Pinterest
+                        </p>
+                    </a>
+                </section>
+                <section className='link'>
+                    <a href="https://open.spotify.com/">
+                        <p className='link_title'>
+                            Spotify
+                        </p>
+                    </a>
+                </section>
+                <section className='link'>
+                    <a href="https://telegram.org/">
+                        <p className='link_title'>
+                            Telegram
+                        </p>
+                    </a>
+                </section>
+                <section className='link'>
+                    <a href="https://web.whatsapp.com/">
+                        <p className='link_title'>
+                            Whatsapp
+                        </p>
+                    </a>
+                </section>
+                <section className='link'>
+                    <a href="https://discord.com/">
+                        <p className='link_title'>
+                            Discord
+                        </p>
+                    </a>
+                </section>
+                <section className='link'>
+                    <a href="https://github.com/">
+                        <p className='link_title'>
+                            GitHub
+                        </p>
+                    </a>
+                </section>
+                <section className='link'>
+                    <a href="https://medium.com/">
+                        <p className='link_title'>
+                            Medium
+                        </p>
+                    </a>
+                </section>
+                <section className='link'>
+                    <a href="https://www.reddit.com/">
+                        <p className='link_title'>
+                            Reddit
+                        </p>
+                    </a>
+                </section>
+                <section className='link'>
+                    <a href="https://stackoverflow.com/">
+                        <p className='link_title'>
+                            Stack Overflow
+                        </p>
+                    </a>
+                </section>
+                <section className='link'>
+                    <a href="https://slack.com/intl/pt-br">
+                        <p className='link_title'>
+                            Slack
+                        </p>
+                    </a>
+                </section>
+                <section className='link'>
+                    <a href="https://store.steampowered.com/?l=portuguese">
+                        <p className='link_title'>
+                            Steam
+                        </p>
+                    </a>
+                </section>
             </main>
         </div>
     )

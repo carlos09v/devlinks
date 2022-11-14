@@ -8,4 +8,4 @@
  <img height='500' src="https://github.com/carlos09v/devlinks/blob/main/devlink/src/assets/Admin_preview.png?raw=true" alt="Preview">
 </div>
 <p>Projeto realizado no período de 07 a 11 de Novembro - 2022</p>
-<h3>💜 React - Vite - NodeJS - FireBase 💜</h3>
+<h3>💜 React - TypeScript - Vite - NodeJS - FireBase 💜</h3>
