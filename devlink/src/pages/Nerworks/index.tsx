@@ -99,6 +99,7 @@ const Networks = () => {
                         <label className='label' htmlFor="user">Nome de usuário:</label>
                         <Input
                             type='text'
+                            maxlength={30}
                             id='user'
                             placeholder='@...'
                             value={nameUser}
@@ -121,7 +122,7 @@ const Networks = () => {
                     <form className='form' onSubmit={handleSaveLinks}>
                         <label className='label' htmlFor="insta">Link do Intagram:</label>
                         <Input
-                            type='text'
+                            type='url'
                             id='insta'
                             placeholder='Digite a url do Instagram...'
                             value={instagram}
@@ -129,7 +130,7 @@ const Networks = () => {
                         />
                         <label className='label' htmlFor="twitt">Link do Twitter:</label>
                         <Input
-                            type='text'
+                            type='url'
                             id='twitt'
                             placeholder='Digite a url do Twitter...'
                             value={twitter}
@@ -137,7 +138,7 @@ const Networks = () => {
                         />
                         <label className='label' htmlFor="gitHub">Link do GitHub:</label>
                         <Input
-                            type='text'
+                            type='url'
                             id='gitHub'
                             placeholder='Digite a url do GitHub...'
                             value={gitHub}

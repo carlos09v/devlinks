@@ -68,6 +68,7 @@ const Admin = () => {
         <Input
           id="link"
           type="text"
+          maxlength={30}
           placeholder="Nome do link..."
           value={nameInput}
           onChange={(e: FormEvent) => setNameInput((e.target as HTMLTextAreaElement).value)}
