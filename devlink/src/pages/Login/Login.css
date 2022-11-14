@@ -22,3 +22,12 @@
     font-size: 1.1em;
     color: white;
 }
+
+#accessAccount {
+    color: white;
+    margin-top: 20px;
+}
+
+#accessAccount > a {
+    color: plum;
+}

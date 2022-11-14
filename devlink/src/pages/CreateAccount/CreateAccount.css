@@ -1,0 +1,8 @@
+#accessLogin-link {
+    color: #fff;
+    margin-top: 20px;
+}
+
+#accessLogin-link > a {
+    color: #64FB76;
+}

@@ -2,12 +2,12 @@ import { FormEvent } from 'react'
 import './Input.css'
 
 interface InputProps {
-    type: string
-    id: string
-    placeholder: string
-    value: string
-    onChange?: (e: FormEvent) => void
-    autoComplete?: string
+  id?: string
+  type: string
+  placeholder: string
+  onChange?: (e: FormEvent) => void
+  value?: string
+  autoComplete?: string
 }
 
 const Input = (props: InputProps) => {

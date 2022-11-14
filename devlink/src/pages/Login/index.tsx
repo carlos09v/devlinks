@@ -1,18 +1,26 @@
-import { FormEvent, useState } from 'react'
+import { FormEvent, useEffect, useState } from 'react'
 
 import './Login.css'
 import Logo from '../../components/Logo'
 import Input from '../../components/Input'
 
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { auth } from '../../services/firebaseConnection'
 import { signInWithEmailAndPassword } from 'firebase/auth'
 import { toast } from 'react-toastify'
 
 const Login = () => {
+    const navigate = useNavigate()
+    // Navigate to Admin
+    useEffect(() => {
+        if(localStorage.getItem('@detailUser')) {
+            toast.warn('Você está logado !')
+            navigate('/admin')
+        }
+    }, [])
+
     const [email, setEmail] = useState('')
     const [senha, setSenha] = useState('')
-    const navigate = useNavigate()
 
     // Sistema de Login usando Firebase
     const handleLogin = (e: FormEvent) => {
@@ -23,6 +31,12 @@ const Login = () => {
             return
         }
 
+        if(senha.length < 6) {
+            toast.warn('A senha precisa ter no mínimo 6 caracteres !')
+            return
+        }
+
+        // Logar
         signInWithEmailAndPassword(auth, email, senha).then(() => {
             toast.success('Bem vindo(a) de volta :)')
             navigate('/admin', { replace: true })
@@ -39,7 +53,6 @@ const Login = () => {
             <form onSubmit={handleLogin} className='form'>
                 <Input
                     type="email"
-                    id="email"
                     placeholder='Digite eu email...'
                     value={email}
                     onChange={(e: FormEvent) => setEmail((e.target as HTMLTextAreaElement).value)}
@@ -47,13 +60,15 @@ const Login = () => {
 
                 <Input
                     type="password"
-                    id="password" autoComplete='on' placeholder='*********'
+                    autoComplete='on' placeholder='*********'
                     value={senha}
                     onChange={(e: FormEvent) => setSenha((e.target as HTMLTextAreaElement).value)}
                 />
 
                 <button type="submit">Acessar</button>
             </form>
+
+            <p id='accessAccount'>Ainda não possui uma conta? <Link to='/create-account'>Clique aqui para criá-la.</Link></p>
         </div>
     )
 }

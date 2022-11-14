@@ -1,23 +1,15 @@
+import { Link } from "react-router-dom"
+import Logo from "./Logo"
 import './Header.css'
-import { BiLogOut } from 'react-icons/bi'
-import { Link } from 'react-router-dom'
-
-import { signOut } from 'firebase/auth'
-import { auth } from '../services/firebaseConnection'
 
 const Header = () => {
-   async function handleLogOut() {
-    // Deslogar usuario
-    await signOut(auth)
-   }
-
   return (
-    <header>
+    <header className="header-main">
+        <Logo id='logo-header' />
+        
         <nav>
-            <button onClick={handleLogOut}><BiLogOut size={28} color='#DB2629' /></button>
-
-            <Link to='/admin'>Links</Link>
-            <Link to='/admin/social'>Redes Sociais</Link>
+            <Link to='/create-account'>Criar Conta</Link>
+            <Link to='/login'>Fazer Login</Link>
         </nav>
     </header>
   )

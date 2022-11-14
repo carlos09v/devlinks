@@ -1,6 +1,7 @@
 import './Home.css'
 import { useEffect, useState } from 'react'
 import Social from '../../components/Social'
+import Header from '../../components/Header'
 
 import { FaTwitter, FaInstagram, FaGithub } from 'react-icons/fa'
 
@@ -10,6 +11,7 @@ import { db } from '../../services/firebaseConnection'
 const Home = () => {
     const [links, setLinks] = useState([])
     const [socialLinks, setSocialLinks] = useState<any>({})
+
 
     // Qndo o componente carregar, executa o useEffect
     useEffect(() => {
@@ -61,8 +63,10 @@ const Home = () => {
 
     return (
         <div className='home-container'>
-            <h1>Carlos Vinicius</h1>
-            <span>@carlos09v</span>
+            <Header />
+
+            <h1>Gerador de Links</h1>
+            <h2 className='title'>Veja meus links abaixo 👇</h2>
 
             <main className='links'>
 

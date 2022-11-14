@@ -4,12 +4,12 @@ import { MdAddLink } from 'react-icons/md'
 import { FiTrash2 } from 'react-icons/fi'
 import { toast } from 'react-toastify'
 
-import Header from "../../components/Header"
+import HeaderAdmin from '../../components/HeaderAdmin'
 import Input from "../../components/Input"
 import Logo from "../../components/Logo"
 
 import { db } from '../../services/firebaseConnection'
-import { addDoc, collection, onSnapshot, query, orderBy, doc, deleteDoc } from 'firebase/firestore'
+import { addDoc, collection} from 'firebase/firestore'
 
 const Admin = () => {
   const [nameInput, setNameInput] = useState('')
@@ -17,30 +17,15 @@ const Admin = () => {
   const [backgroundColorInput, setBackgroundColorInput] = useState('#fff')
   const [textColorInput, setTextColorInput] = useState('#121212')
 
-  const [links, setLinks] = useState([])
+  const [id, setId] = useState('')
 
   // Qndo o componente carregar, executa o useEffect
   useEffect(() => {
-    const linksRef = collection(db, 'links')
-    const queryRef = query(linksRef, orderBy('created', 'asc'))
-
-    // Realtime
-    // onSnapShot => observar o DB
-    onSnapshot(queryRef, (snapshot) => {
-      let lista: any = []
-
-      snapshot.forEach(doc => {
-        lista.push({
-          id: doc.id,
-          name: doc.data().name,
-          url: doc.data().url,
-          bg: doc.data().bg,
-          color: doc.data().color
-        })
-      })
-
-      setLinks(lista)
-    })
+    const detailUser = JSON.parse(localStorage.getItem('@detailUser') || '')
+    if(detailUser){
+      const uid = detailUser.uid
+      setId(uid)
+    }
   }, [])
 
   // Enviar dados pro DB
@@ -71,16 +56,10 @@ const Admin = () => {
 
   }
 
-  // Deletar Link
-  const handleDeleteLink = async (id: string) => {
-    const docRef = doc(db, 'links', id)
-    await deleteDoc(docRef)
-  }
-
 
   return (
     <div className="admin-container">
-      <Header />
+      <HeaderAdmin id={id} />
 
       <Logo />
 
@@ -136,18 +115,6 @@ const Admin = () => {
 
         <button type="submit">Cadastrar <MdAddLink size={24} color='#fff' /></button>
       </form>
-
-      <h2 className='title'>Meus Links</h2>
-      {links.map((item: any, index) => (
-        <article key={index} className='list animate-pop' style={{ backgroundColor: item.bg, color: item.color }}>
-          <p>{item.name}</p>
-          <div>
-            <button onClick={() => handleDeleteLink(item.id)}>
-              <FiTrash2 size={18} color='#fff' />
-            </button>
-          </div>
-        </article>
-      ))}
     </div>
   )
 }
