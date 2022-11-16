@@ -1,24 +1,38 @@
 import './Networks.css'
 import { FormEvent, useEffect, useState } from 'react'
+import { FiTrash2 } from 'react-icons/fi'
 import { MdAddLink } from 'react-icons/md'
+import { useNavigate } from 'react-router-dom'
 
 import HeaderAdmin from '../../components/HeaderAdmin'
 import Input from '../../components/Input'
 
 import { db } from '../../services/firebaseConnection'
-import { setDoc, doc, getDoc } from "firebase/firestore";
+import { setDoc, doc, getDoc, deleteDoc, collection, query, limit, orderBy, getDocs, onSnapshot } from "firebase/firestore";
 import { toast } from 'react-toastify'
 
 const Networks = () => {
+    const [id, setId] = useState('')
+    const [links, setLinks] = useState([])
+
     const [instagram, setInstagram] = useState('')
     const [twitter, setTwitter] = useState('')
     const [gitHub, setGitHub] = useState('')
     
     const [nameUser, setNameUser] = useState('')
     const [photoUser, setPhotoUser] = useState('')
+    const navigate = useNavigate()
 
     // Qndo o componente carregar, executa o useEffect
     useEffect(() => {
+        const detailUser = JSON.parse(localStorage.getItem('@detailUser') || '')
+        if (detailUser) {
+            const uid = detailUser.uid
+            setId(uid)
+        } else {
+            navigate('/error')
+        }
+
         // Get UserData
         function loadDataUser() {
             const docRef = doc(db, 'info-user', 'info')
@@ -33,7 +47,7 @@ const Networks = () => {
                 })
         }
 
-        // Get Link
+        // Get SocialLink
         function loadLinks() {
             const docRef = doc(db, 'social', 'link')
             getDoc(docRef)
@@ -48,6 +62,31 @@ const Networks = () => {
                 })
         }
 
+
+        // Get Links
+        function getLinks() {
+            const linksRef = collection(db, "links");
+            const queryRef = query(linksRef, orderBy("created", "asc"), limit(7));
+    
+            // Watch Data Links
+            onSnapshot(queryRef, (snapshot) => {
+                    let lista: any = [];
+    
+                    snapshot.forEach((doc: any) => {
+                        lista.push({
+                            id: doc.id,
+                            name: doc.data().name,
+                            url: doc.data().url,
+                            bg: doc.data().bg,
+                            color: doc.data().color
+                        })
+                    })
+    
+                    setLinks(lista)
+                })
+        }
+
+        getLinks()
         loadLinks()
         loadDataUser()
     }, [])
@@ -88,9 +127,17 @@ const Networks = () => {
         })
     }
 
+    // Deletar Link
+    const handleDeleteLink = async (id: string) => {
+        const docRef = doc(db, 'links', id)
+        await deleteDoc(docRef)
+    }
+
     return (
         <div className='admin-container'>
-            <HeaderAdmin />
+            {
+                id !== null && <HeaderAdmin />
+            }
 
             <div className='config-container'>
                 <div>
@@ -99,8 +146,8 @@ const Networks = () => {
                         <label className='label' htmlFor="user">Nome de usuário:</label>
                         <Input
                             type='text'
-                            maxlength={30}
                             id='user'
+                            maxLength={30}
                             placeholder='@...'
                             value={nameUser}
                             onChange={(e: FormEvent) => setNameUser((e.target as HTMLTextAreaElement).value)}
@@ -148,6 +195,18 @@ const Networks = () => {
                     </form>
                 </div>
             </div>
+
+            <h2 className='title'>Veja meus links abaixo 👇</h2>
+            {links.map((item: any) => (
+                <article key={item.id} className='list animate-pop' style={{ backgroundColor: item.bg, color: item.color }}>
+                    <p>{item.name}</p>
+                    <div>
+                        <button onClick={() => handleDeleteLink(item.id)}>
+                            <FiTrash2 size={18} color='#fff' />
+                        </button>
+                    </div>
+                </article>
+            ))}
                 
         </div>
     )

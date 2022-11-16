@@ -8,7 +8,7 @@ interface InputProps {
   onChange?: (e: FormEvent) => void
   value?: string
   autoComplete?: string
-  maxlength?: number
+  maxLength?: number
 }
 
 const Input = (props: InputProps) => {

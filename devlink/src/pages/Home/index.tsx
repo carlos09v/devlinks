@@ -7,6 +7,7 @@ import { FaTwitter, FaInstagram, FaGithub } from 'react-icons/fa'
 
 import { getDocs, collection, orderBy, query, getDoc, doc } from 'firebase/firestore'
 import { db } from '../../services/firebaseConnection'
+import HomeLinks from '../../components/HomeLinks'
 
 const Home = () => {
     const [links, setLinks] = useState([])
@@ -69,125 +70,40 @@ const Home = () => {
             <h2 className='title'>Veja os exemplos de links abaixo 👇</h2>
 
             <main className='links'>
-                <section className='link'>
-                    <a href="https://www.youtube.com/">
-                        <p className='link_title'>
-                            Youtube
-                        </p>
-                    </a>
-                </section>
-                <section className='link'>
-                    <a href="https://www.youtube.com/">
-                        <p className='link_title'>
-                            Linkedin
-                        </p>
-                    </a>
-                </section>
-                <section className='link'>
-                    <a href="https://www.facebook.com/">
-                        <p className='link_title'>
-                            Facebook
-                        </p>
-                    </a>
-                </section>
-                <section className='link'>
-                    <a href="https://twitter.com/">
-                        <p className='link_title'>
-                            Twitter
-                        </p>
-                    </a>
-                </section>
-                <section className='link'>
-                    <a href="https://www.instagram.com/">
-                        <p className='link_title'>
-                            Instagram
-                        </p>
-                    </a>
-                </section>
-                <section className='link'>
-                    <a href="https://www.twitch.tv/">
-                        <p className='link_title'>
-                            Twitch
-                        </p>
-                    </a>
-                </section>
-                <section className='link'>
-                    <a href="https://br.pinterest.com/">
-                        <p className='link_title'>
-                            Pinterest
-                        </p>
-                    </a>
-                </section>
-                <section className='link'>
-                    <a href="https://open.spotify.com/">
-                        <p className='link_title'>
-                            Spotify
-                        </p>
-                    </a>
-                </section>
-                <section className='link'>
-                    <a href="https://telegram.org/">
-                        <p className='link_title'>
-                            Telegram
-                        </p>
-                    </a>
-                </section>
-                <section className='link'>
-                    <a href="https://web.whatsapp.com/">
-                        <p className='link_title'>
-                            Whatsapp
-                        </p>
-                    </a>
-                </section>
-                <section className='link'>
-                    <a href="https://discord.com/">
-                        <p className='link_title'>
-                            Discord
-                        </p>
-                    </a>
-                </section>
-                <section className='link'>
-                    <a href="https://github.com/">
-                        <p className='link_title'>
-                            GitHub
-                        </p>
-                    </a>
-                </section>
-                <section className='link'>
-                    <a href="https://medium.com/">
-                        <p className='link_title'>
-                            Medium
-                        </p>
-                    </a>
-                </section>
-                <section className='link'>
-                    <a href="https://www.reddit.com/">
-                        <p className='link_title'>
-                            Reddit
-                        </p>
-                    </a>
-                </section>
-                <section className='link'>
-                    <a href="https://stackoverflow.com/">
-                        <p className='link_title'>
-                            Stack Overflow
-                        </p>
-                    </a>
-                </section>
-                <section className='link'>
-                    <a href="https://slack.com/intl/pt-br">
-                        <p className='link_title'>
-                            Slack
-                        </p>
-                    </a>
-                </section>
-                <section className='link'>
-                    <a href="https://store.steampowered.com/?l=portuguese">
-                        <p className='link_title'>
-                            Steam
-                        </p>
-                    </a>
-                </section>
+                <HomeLinks href='https://www.youtube.com/' name='Youtube' />
+
+                <HomeLinks href='https://www.linkedin.com/' name='Linkedin' />
+
+                <HomeLinks href='https://www.facebook.com/' name='Facebook' />
+
+                <HomeLinks href='https://twitter.com/' name='Twitter' />
+
+                <HomeLinks href='https://www.instagram.com/' name='Instagram' />
+
+                <HomeLinks href='https://www.twitch.tv/' name='Twitch' />
+
+                <HomeLinks href='https://br.pinterest.com/' name='Pinterest' />
+
+                <HomeLinks href='https://open.spotify.com/' name='Spotify' />
+
+                <HomeLinks href='https://telegram.org/' name='Telegram' />
+
+                <HomeLinks href='https://web.whatsapp.com/' name='Whatsapp' />
+
+                <HomeLinks href='https://discord.com/' name='Discord' />
+
+                <HomeLinks href='https://github.com/' name='GitHub' />
+
+                <HomeLinks href='https://medium.com/' name='Medium' />
+
+                <HomeLinks href='https://www.reddit.com/' name='Reddit' />
+
+                <HomeLinks href='https://stackoverflow.com/' name='Stack Overflow' />
+
+                <HomeLinks href='https://slack.com/intl/pt-br' name='Slack' />
+
+                <HomeLinks href='https://store.steampowered.com/?l=portuguese' name='Steam' />
+                
             </main>
         </div>
     )
