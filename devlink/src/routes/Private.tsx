@@ -15,12 +15,12 @@ const Private = ({ children }: any) => {
             
             onAuthStateChanged(auth, (user) => {
                 if(user){
-                    const userData = {
-                        uid: user.uid,
-                        email: user.email
-                    }
+                    // const userData = {
+                    //     uid: user.uid,
+                    //     email: user.email
+                    // }
 
-                    localStorage.setItem('@detailUser', JSON.stringify(userData))
+                    // localStorage.setItem('@detailUser', JSON.stringify(userData))
                     setLoading(false)
                     setSigned(true)
                 }else {

@@ -1,7 +1,6 @@
 import './Admin.css'
 import { FormEvent, useEffect, useState } from 'react'
 import { MdAddLink } from 'react-icons/md'
-import { FiTrash2 } from 'react-icons/fi'
 import { toast } from 'react-toastify'
 
 import HeaderAdmin from '../../components/HeaderAdmin'
@@ -9,7 +8,9 @@ import Input from "../../components/Input"
 import Logo from "../../components/Logo"
 
 import { db } from '../../services/firebaseConnection'
-import { addDoc, collection} from 'firebase/firestore'
+import { addDoc, collection, doc, setDoc} from 'firebase/firestore'
+import { getAuth } from 'firebase/auth'
+import { useNavigate } from 'react-router-dom'
 
 const Admin = () => {
   const [nameInput, setNameInput] = useState('')
@@ -18,13 +19,17 @@ const Admin = () => {
   const [textColorInput, setTextColorInput] = useState('#121212')
 
   const [id, setId] = useState('')
+  const navigate = useNavigate()
 
   // Qndo o componente carregar, executa o useEffect
+  const auth = getAuth()
+  const user = auth.currentUser
   useEffect(() => {
-    const detailUser = JSON.parse(localStorage.getItem('@detailUser') || '')
-    if(detailUser){
-      const uid = detailUser.uid
+    if(user?.uid) {
+      const uid = user.uid
       setId(uid)
+    }else {
+      navigate('/error')
     }
   }, [])
 
@@ -33,13 +38,13 @@ const Admin = () => {
     e.preventDefault()
     // Validar dados
     if (nameInput === '' || urlInput === '') {
-      toast.warn('Preencha todos os campos!')
-      return
+      return toast.warn('Preencha todos os campos!')
     }
 
     // Criar uma Collection (Coluna) no FireBase e inserir os dados
+    const linksRef = collection(db, `users/${id}/dataLinks`);
     // addDoc -> gera ID aleatorio
-    addDoc(collection(db, 'links'), {
+    await addDoc(linksRef, {
       name: nameInput,
       url: urlInput,
       bg: backgroundColorInput,
@@ -53,7 +58,6 @@ const Admin = () => {
       console.log(err)
       toast.error('Ops, erro ao salvar o link!')
     })
-
   }
 
 

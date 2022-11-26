@@ -6,61 +6,74 @@ import { db } from '../../services/firebaseConnection'
 import HeaderAdmin from '../../components/HeaderAdmin'
 import Logo from '../../components/Logo'
 import { useNavigate } from 'react-router-dom'
+import { getAuth } from 'firebase/auth'
 
 const Profile = () => {
     const [id, setId] = useState('')
     const [links, setLinks] = useState([])
-    const [inforUser, setInfoUser] = useState<any>({ userName: '', userPhoto: '' })
+    const [infoUser, setInfoUser] = useState<{ userName: any , userPhoto: any }>({userName: '', userPhoto: ''})
     const navigate = useNavigate()
 
+    const auth = getAuth()
+    const user = auth.currentUser
     useEffect(() => {
-        const detailUser = JSON.parse(localStorage.getItem('@detailUser') || '')
-        if (detailUser) {
-            const uid = detailUser.uid
+        if (user?.uid) {
+            const uid = user.uid
             setId(uid)
         } else {
             navigate('/error')
         }
 
-        const linksRef = collection(db, "links");
-        const queryRef = query(linksRef, orderBy("created", "asc"), limit(7));
-
-        // Get Data Links
-        getDocs(queryRef)
-            .then((snapshot) => {
-                let lista: any = [];
-
-                snapshot.forEach((doc: any) => {
-                    lista.push({
-                        id: doc.id,
-                        name: doc.data().name,
-                        url: doc.data().url,
-                        bg: doc.data().bg,
-                        color: doc.data().color
+        // Get DataLinks
+        const getDataLinks = () => {
+            const linksRef = collection(db, `users/${id}/dataLinks`);
+            const queryRef = query(linksRef, orderBy("created", "asc"), limit(9));
+    
+            // Get Data Links
+            getDocs(queryRef)
+                .then((snapshot) => {
+                    let lista: any = [];
+    
+                    snapshot.forEach((doc: any) => {
+                        lista.push({
+                            id: doc.id,
+                            name: doc.data().name,
+                            url: doc.data().url,
+                            bg: doc.data().bg,
+                            color: doc.data().color
+                        })
                     })
+    
+                    setLinks(lista)
                 })
+        }
 
-                setLinks(lista)
-            })
+        // Get UserData
+        const getUserData = () => {
+            if(user?.displayName || user?.photoURL) {
+                setInfoUser({
+                    userName: user.displayName,
+                    userPhoto: user.photoURL
+                })
+            }
+        }
 
-        const docRef = doc(db, 'info-user', 'info')
-        getDoc(docRef).then(snapshot => {
-            if (snapshot.data()) setInfoUser(snapshot.data())
-        })
+        getDataLinks()
+        getUserData()
     }, [])
 
 
     return (
         <div className='admin-container'>
-            {
-                id !== null && <HeaderAdmin />
-            }
+            <HeaderAdmin />
 
             {
-                inforUser !== null ?
+                infoUser !== null ?
                     <div className='profile-container'>
-                        <div><img src={inforUser.userPhoto} alt={inforUser.userName} /></div>
-                        <p>{inforUser.userName}</p>
+                        <div>
+                            <img src={infoUser.userPhoto} alt={infoUser.userName} />
+                        </div>
+                        <p>{infoUser.userName}</p>
                     </div> :
                     <Logo />
             }

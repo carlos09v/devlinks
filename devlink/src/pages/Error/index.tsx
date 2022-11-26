@@ -10,7 +10,7 @@ const Error = () => {
         <h1>Página não encontrada!</h1>
         <p>Esta página não existe :)</p>
 
-        <Link className='link' to='/'>
+        <Link id='linkError' to='/'>
           Voltar para Home
         </Link>
     </div>

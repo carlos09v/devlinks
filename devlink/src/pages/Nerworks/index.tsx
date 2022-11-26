@@ -8,8 +8,9 @@ import HeaderAdmin from '../../components/HeaderAdmin'
 import Input from '../../components/Input'
 
 import { db } from '../../services/firebaseConnection'
-import { setDoc, doc, getDoc, deleteDoc, collection, query, limit, orderBy, getDocs, onSnapshot } from "firebase/firestore";
+import { setDoc, doc, getDoc, deleteDoc, collection, query, limit, orderBy, getDocs, onSnapshot, addDoc } from "firebase/firestore";
 import { toast } from 'react-toastify'
+import { getAuth, updateProfile } from 'firebase/auth'
 
 const Networks = () => {
     const [id, setId] = useState('')
@@ -18,16 +19,18 @@ const Networks = () => {
     const [instagram, setInstagram] = useState('')
     const [twitter, setTwitter] = useState('')
     const [gitHub, setGitHub] = useState('')
-    
-    const [nameUser, setNameUser] = useState('')
-    const [photoUser, setPhotoUser] = useState('')
+
+    const [nameUser, setNameUser] = useState<any>('')
+    const [photoUser, setPhotoUser] = useState<any>('')
     const navigate = useNavigate()
 
+    const auth = getAuth()
+    const user = auth.currentUser
     // Qndo o componente carregar, executa o useEffect
     useEffect(() => {
-        const detailUser = JSON.parse(localStorage.getItem('@detailUser') || '')
-        if (detailUser) {
-            const uid = detailUser.uid
+        console.log(user)
+        if (user?.uid) {
+            const uid = user.uid
             setId(uid)
         } else {
             navigate('/error')
@@ -35,21 +38,15 @@ const Networks = () => {
 
         // Get UserData
         function loadDataUser() {
-            const docRef = doc(db, 'info-user', 'info')
-            getDoc(docRef)
-                .then((snapshot) => {
-                    if(snapshot.data() !== undefined) {
-                        setNameUser(snapshot.data()?.userName)
-                        setPhotoUser(snapshot.data()?.userPhoto)
-                    }
-                }).catch(err => {
-                    console.log(err)
-                })
+            if(user?.displayName || user?.photoURL ) {
+                setNameUser(user.displayName)
+                setPhotoUser(user.photoURL)
+            }
         }
 
         // Get SocialLink
         function loadLinks() {
-            const docRef = doc(db, 'social', 'link')
+            const docRef = doc(db, `users/${id}/dataSocial`)
             getDoc(docRef)
                 .then((snapshot) => {
                     if (snapshot.data() !== undefined) {
@@ -65,25 +62,25 @@ const Networks = () => {
 
         // Get Links
         function getLinks() {
-            const linksRef = collection(db, "links");
-            const queryRef = query(linksRef, orderBy("created", "asc"), limit(7));
-    
+            const linksRef = collection(db, `users/${id}/dataLinks`);
+            const queryRef = query(linksRef, orderBy("created", "asc"), limit(5));
+
             // Watch Data Links
             onSnapshot(queryRef, (snapshot) => {
-                    let lista: any = [];
-    
-                    snapshot.forEach((doc: any) => {
-                        lista.push({
-                            id: doc.id,
-                            name: doc.data().name,
-                            url: doc.data().url,
-                            bg: doc.data().bg,
-                            color: doc.data().color
-                        })
+                let lista: any = [];
+
+                snapshot.forEach((doc: any) => {
+                    lista.push({
+                        id: doc.id,
+                        name: doc.data().name,
+                        url: doc.data().url,
+                        bg: doc.data().bg,
+                        color: doc.data().color
                     })
-    
-                    setLinks(lista)
                 })
+
+                setLinks(lista)
+            })
         }
 
         getLinks()
@@ -92,30 +89,33 @@ const Networks = () => {
     }, [])
 
     // Salvar dados do usuário
-    function handleSaveUser(e: FormEvent) {
+    async function handleSaveUser(e: FormEvent) {
         e.preventDefault()
         
-        if(nameUser === '' || photoUser === '') {
-            toast.warn('Preencha todos os campos!')
-            return
+        if (nameUser === '' && photoUser === '') {
+            return toast.warn('Preencha todos os campos!')
         }
 
-        setDoc(doc(db, 'info-user', 'info'), {
-            userName: nameUser,
-            userPhoto: photoUser
-        }).then(() => {
-            toast.success('Informação do usuário atualizadas com sucesso !')
-        }).catch(err => {
-            console.log(err)
-            toast.error('Erro ao atualizar as informações do usuário !')
-        })
+        if(user) {
+            await updateProfile(user, {
+                displayName: nameUser,
+                photoURL: photoUser
+            }).then(() => {
+                toast.success('Informação do usuário atualizadas com sucesso !')
+            }).catch(err => {
+                console.log(err)
+                toast.error('Erro ao atualizar as informações do usuário !')
+            })
+        }else {
+            return toast.error('Usuário nulo!')
+        }
     }
 
     // Salvar Links
-    function handleSaveLinks(e: FormEvent) {
+    async function handleSaveLinks(e: FormEvent) {
         e.preventDefault()
 
-        setDoc(doc(db, 'social', 'link'), {
+        await setDoc(doc(db, `users/${id}dataSocial`), {
             gitHub: gitHub,
             instagram: instagram,
             twitter: twitter
@@ -128,16 +128,14 @@ const Networks = () => {
     }
 
     // Deletar Link
-    const handleDeleteLink = async (id: string) => {
-        const docRef = doc(db, 'links', id)
+    const handleDeleteLink = async (id: string, idUser: string) => {
+        const docRef = doc(db, `users/${idUser}/dataLinks/${id}`)
         await deleteDoc(docRef)
     }
 
     return (
         <div className='admin-container'>
-            {
-                id !== null && <HeaderAdmin />
-            }
+            <HeaderAdmin id={id} />
 
             <div className='config-container'>
                 <div>
@@ -201,13 +199,13 @@ const Networks = () => {
                 <article key={item.id} className='list animate-pop' style={{ backgroundColor: item.bg, color: item.color }}>
                     <p>{item.name}</p>
                     <div>
-                        <button onClick={() => handleDeleteLink(item.id)}>
+                        <button onClick={() => handleDeleteLink(item.id,id)}>
                             <FiTrash2 size={18} color='#fff' />
                         </button>
                     </div>
                 </article>
             ))}
-                
+
         </div>
     )
 }

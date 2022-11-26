@@ -11,10 +11,15 @@ const HeaderAdmin = ({ id }: { id?: string}) => {
 
   // Deslogar usuario
    async function handleLogOut() {
-    localStorage.removeItem('@detailUser')
-    toast.success('Usuário deslogado com sucesso !')
     await signOut(auth)
-    navigate('/')
+      .then(() => {
+        toast.success('Usuário deslogado com sucesso !')
+        navigate('/')
+      }).catch(err => {
+        console.log(err)
+        toast.error('Erro ao deslogar!')
+      })
+      
    }
 
   return (
