@@ -32,7 +32,7 @@ const Profile = () => {
             // Get DataLinks
             function getDataLinks() {
                 const linksRef = collection(db, `users/${user?.uid}/dataLinks`);
-                const queryRef = query(linksRef, orderBy("created", "asc"), limit(9));
+                const queryRef = query(linksRef, orderBy("created", "asc"), limit(7));
 
                 // Get Data Links
                 getDocs(queryRef)

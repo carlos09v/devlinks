@@ -57,8 +57,8 @@ const Admin = () => {
       }).then(() => {
         setNameInput('')
         setUrlInput('')
-        setTextColorInput('#fff')
-        setBackgroundColorInput('#121212')
+        setTextColorInput('#121212')
+        setBackgroundColorInput('#fff')
         toast.success('Link registrado com sucesso!')
       }).catch(err => {
         console.log(err)

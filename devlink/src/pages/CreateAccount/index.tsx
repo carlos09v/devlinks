@@ -7,8 +7,6 @@ import Input from '../../components/Input'
 import Logo from '../../components/Logo'
 import './CreateAccount.css'
 
-import { auth } from '../../services/firebaseConnection'
-
 const CreateAccount = () => {
   const navigate = useNavigate()
   const auth = getAuth()

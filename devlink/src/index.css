@@ -8,6 +8,7 @@
 
 body {
     background-image: linear-gradient(#232630, #050507);
+    min-height: 100vh;
 }
 
 button {
@@ -16,4 +17,20 @@ button {
 
 a {
     text-decoration: none;
+}
+
+/* Responsitivy */
+@media screen and (max-width: 835px) {
+    .admin-container .socialLinks-area {
+        margin-top: 65px;
+        margin-left: 24px;
+    }
+    
+}
+
+@media screen and (max-width: 650px) {
+    .config-container {
+        flex-direction: column;
+        gap: 0;
+    }
 }
