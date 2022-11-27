@@ -10,7 +10,7 @@ import Input from '../../components/Input'
 import { db } from '../../services/firebaseConnection'
 import { setDoc, doc, getDoc, deleteDoc, collection, query, limit, orderBy, getDocs, onSnapshot, addDoc } from "firebase/firestore";
 import { toast } from 'react-toastify'
-import { getAuth, updateProfile } from 'firebase/auth'
+import { getAuth, onAuthStateChanged, updateProfile } from 'firebase/auth'
 
 const Networks = () => {
     const [id, setId] = useState('')
@@ -24,106 +24,116 @@ const Networks = () => {
     const [photoUser, setPhotoUser] = useState<any>('')
     const navigate = useNavigate()
 
+    // Qndo o componente carregar, executa o useEffect
     const auth = getAuth()
     const user = auth.currentUser
-    // Qndo o componente carregar, executa o useEffect
     useEffect(() => {
-        console.log(user)
-        if (user?.uid) {
-            const uid = user.uid
-            setId(uid)
-        } else {
-            navigate('/error')
-        }
-
-        // Get UserData
-        function loadDataUser() {
-            if(user?.displayName || user?.photoURL ) {
-                setNameUser(user.displayName)
-                setPhotoUser(user.photoURL)
+        onAuthStateChanged(auth, async (user) => {
+            if (user?.uid) {
+                const uid = user.uid
+                setId(uid)
+            } else {
+                navigate('/error')
             }
-        }
 
-        // Get SocialLink
-        function loadLinks() {
-            const docRef = doc(db, `users/${id}/dataSocial`)
-            getDoc(docRef)
-                .then((snapshot) => {
-                    if (snapshot.data() !== undefined) {
-                        setInstagram(snapshot.data()?.instagram)
-                        setTwitter(snapshot.data()?.twitter)
-                        setGitHub(snapshot.data()?.gitHub)
-                    }
-                }).catch(err => {
-                    console.log(err)
-                })
-        }
+            // Get UserData
+            function loadDataUser() {
+                if (user?.displayName || user?.photoURL) {
+                    setNameUser(user.displayName)
+                    setPhotoUser(user.photoURL)
+                }
+            }
 
-
-        // Get Links
-        function getLinks() {
-            const linksRef = collection(db, `users/${id}/dataLinks`);
-            const queryRef = query(linksRef, orderBy("created", "asc"), limit(5));
-
-            // Watch Data Links
-            onSnapshot(queryRef, (snapshot) => {
-                let lista: any = [];
-
-                snapshot.forEach((doc: any) => {
-                    lista.push({
-                        id: doc.id,
-                        name: doc.data().name,
-                        url: doc.data().url,
-                        bg: doc.data().bg,
-                        color: doc.data().color
+            // Get SocialLink
+            function getSocialLinks() {
+                const docRef = doc(db, `users/${user?.uid}/dataSocial/socialUrls`)
+                getDoc(docRef)
+                    .then((snapshot) => {
+                        if (snapshot.data() !== undefined) {
+                            setInstagram(snapshot.data()?.instagram)
+                            setTwitter(snapshot.data()?.twitter)
+                            setGitHub(snapshot.data()?.gitHub)
+                        }
+                    }).catch(err => {
+                        console.log(err)
                     })
+            }
+
+
+            // Get Links
+            function getLinks() {
+                const linksRef = collection(db, `users/${user?.uid}/dataLinks`);
+                const queryRef = query(linksRef, orderBy("created", "asc"), limit(5));
+
+                // Watch Data Links
+                onSnapshot(queryRef, (snapshot) => {
+                    let lista: any = [];
+
+                    snapshot.forEach((doc: any) => {
+                        lista.push({
+                            id: doc.id,
+                            name: doc.data().name,
+                            url: doc.data().url,
+                            bg: doc.data().bg,
+                            color: doc.data().color
+                        })
+                    })
+
+                    setLinks(lista)
                 })
+            }
 
-                setLinks(lista)
-            })
-        }
 
-        getLinks()
-        loadLinks()
-        loadDataUser()
+            loadDataUser()
+            getSocialLinks()
+            getLinks()
+        })
+
+
     }, [])
 
     // Salvar dados do usuário
-    async function handleSaveUser(e: FormEvent) {
+    function handleSaveUser(e: FormEvent) {
         e.preventDefault()
-        
+
         if (nameUser === '' && photoUser === '') {
             return toast.warn('Preencha todos os campos!')
         }
 
-        if(user) {
-            await updateProfile(user, {
+        if (user) {
+            updateProfile(user, {
                 displayName: nameUser,
                 photoURL: photoUser
             }).then(() => {
+                console.log(user)
                 toast.success('Informação do usuário atualizadas com sucesso !')
             }).catch(err => {
                 console.log(err)
                 toast.error('Erro ao atualizar as informações do usuário !')
             })
-        }else {
+        } else {
             return toast.error('Usuário nulo!')
         }
     }
 
     // Salvar Links
-    async function handleSaveLinks(e: FormEvent) {
+    function handleSaveLinks(e: FormEvent) {
         e.preventDefault()
 
-        await setDoc(doc(db, `users/${id}dataSocial`), {
-            gitHub: gitHub,
-            instagram: instagram,
-            twitter: twitter
-        }).then(() => {
-            toast.success('Urls salvas com sucesso!')
-        }).catch(err => {
-            toast.error('Erro ao salvar Urls!')
-            console.log(err)
+        // Qndo Autenticado
+        onAuthStateChanged(auth, async () => {
+
+            // Obs: Acabo de passar umas 4 horas pra descobrir q o caminho precisa ser par e eu estava passando 3 (Qual o sentido ????)
+            setDoc(doc(db, `users/${id}/dataSocial/socialUrls`), {
+                gitHub: gitHub,
+                instagram: instagram,
+                twitter: twitter
+            }).then(() => {
+                toast.success('Urls salvas com sucesso!')
+            }).catch(err => {
+                toast.error('Erro ao salvar Urls!')
+                console.log(err)
+            })
         })
     }
 
@@ -199,7 +209,7 @@ const Networks = () => {
                 <article key={item.id} className='list animate-pop' style={{ backgroundColor: item.bg, color: item.color }}>
                     <p>{item.name}</p>
                     <div>
-                        <button onClick={() => handleDeleteLink(item.id,id)}>
+                        <button onClick={() => handleDeleteLink(item.id, id)}>
                             <FiTrash2 size={18} color='#fff' />
                         </button>
                     </div>

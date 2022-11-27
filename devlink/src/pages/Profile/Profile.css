@@ -63,6 +63,49 @@
     animation-name: animate-pop;
 }
 
+/* Links */
+.links .link-area {
+    background-color: white;
+    width: 100%;
+    margin-bottom: 18px;
+    padding: 8px 0;
+    user-select: none;
+    border-radius: 4px;
+
+    transition: transform .4s;
+}
+
+.links .link-area:hover {
+    transform: scale(1.04);
+}
+
+.link-area .link-text {
+    font-size: 1.1em;
+    line-height: 150%;
+    color: #000;
+}
+
+/* SocialLinks */
+.admin-container .socialLinks-area {
+    position: absolute;
+    left: 0;
+    margin-left: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    margin-top: 14px;
+    padding: 8px 0;
+    user-select: none;
+    border-radius: 4px;
+
+    transition: transform .4s;
+}
+
+.admin-container .socialLinks-area > a:hover {
+    transform: scale(1.04);
+}
+
 @keyframes animate-pop {
     0% {
         opacity: 0;

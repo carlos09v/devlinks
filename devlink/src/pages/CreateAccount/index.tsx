@@ -1,4 +1,4 @@
-import { createUserWithEmailAndPassword } from 'firebase/auth'
+import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged } from 'firebase/auth'
 import { FormEvent, useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
@@ -11,12 +11,16 @@ import { auth } from '../../services/firebaseConnection'
 
 const CreateAccount = () => {
   const navigate = useNavigate()
-  // Navigate to Admin
+  const auth = getAuth()
+  // Navigate to Admin if Autenticated
   useEffect(() => {
-    if (localStorage.getItem('@detailUser')) {
-      toast.warn('Você está logado !')
-      navigate('/admin')
-    }
+    onAuthStateChanged(auth, async (user) => {
+      if (user?.uid) {
+        toast.warn('Você está logado !')
+        navigate('/admin')
+      }
+      
+    })
   }, [])
 
   const [userDataRegister, setUserDataRegister] = useState({ email: '', password: '', confirmPassword: '' })

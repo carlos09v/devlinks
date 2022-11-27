@@ -1,66 +1,10 @@
 import './Home.css'
-import { useEffect, useState } from 'react'
-import Social from '../../components/Social'
 import Header from '../../components/Header'
 
-import { FaTwitter, FaInstagram, FaGithub } from 'react-icons/fa'
-
-import { getDocs, collection, orderBy, query, getDoc, doc } from 'firebase/firestore'
-import { db } from '../../services/firebaseConnection'
 import HomeLinks from '../../components/HomeLinks'
 
 const Home = () => {
-    const [links, setLinks] = useState([])
-    const [socialLinks, setSocialLinks] = useState<any>({})
 
-
-    // Qndo o componente carregar, executa o useEffect
-    useEffect(() => {
-        function loadLinks() {
-            const linksRef = collection(db, 'links')
-            const queryRef = query(linksRef, orderBy('created', 'asc'))
-
-            // Get Links
-            getDocs(queryRef)
-                .then((snapshot) => {
-                    let lista: any = []
-
-                    snapshot.forEach(doc => {
-                        lista.push({
-                            id: doc.id,
-                            name: doc.data().name,
-                            url: doc.data().url,
-                            bg: doc.data().bg,
-                            color: doc.data().color
-                        })
-                    })
-
-                    setLinks(lista)
-                })
-        }
-
-        loadLinks()
-    }, [])
-
-    useEffect(() => {
-        // Get SocialLinks
-        function loadSocialLinks() {
-            const docRef = doc(db, 'social', 'link')
-
-            getDoc(docRef)
-                .then(snapshot => {
-                    if (snapshot.data() !== undefined) {
-                        setSocialLinks({
-                            instagram: snapshot.data()?.instagram,
-                            twitter: snapshot.data()?.twitter,
-                            gitHub: snapshot.data()?.gitHub
-                        })
-                    }
-                })
-        }
-
-        loadSocialLinks()
-    }, [])
 
     return (
         <div className='home-container'>

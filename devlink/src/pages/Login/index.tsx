@@ -5,18 +5,21 @@ import Logo from '../../components/Logo'
 import Input from '../../components/Input'
 
 import { Link, useNavigate } from 'react-router-dom'
-import { auth } from '../../services/firebaseConnection'
-import { signInWithEmailAndPassword } from 'firebase/auth'
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth'
 import { toast } from 'react-toastify'
 
 const Login = () => {
     const navigate = useNavigate()
-    // Navigate to Admin
+    const auth = getAuth()
+    // Navigate to Admin if Autenticated
     useEffect(() => {
-        if(localStorage.getItem('@detailUser')) {
-            toast.warn('Você está logado !')
-            navigate('/admin')
-        }
+        onAuthStateChanged(auth, async (user) => {
+            if (user?.uid) {
+                toast.warn('Você está logado !')
+                navigate('/admin')
+            }
+
+        })
     }, [])
 
     const [email, setEmail] = useState('')
@@ -31,7 +34,7 @@ const Login = () => {
             return
         }
 
-        if(senha.length < 6) {
+        if (senha.length < 6) {
             toast.warn('A senha precisa ter no mínimo 6 caracteres !')
             return
         }
@@ -45,7 +48,7 @@ const Login = () => {
             console.log(err)
         })
     }
-    
+
     return (
         <div className='login-container'>
             <Logo />
