@@ -13,6 +13,7 @@ const Login = () => {
     const auth = getAuth()
     // Navigate to Admin if Autenticated
     useEffect(() => {
+        // Qndo Autenticado
         onAuthStateChanged(auth, async (user) => {
             if (user?.uid) {
                 toast.warn('Você está logado !')
@@ -29,15 +30,9 @@ const Login = () => {
     const handleLogin = (e: FormEvent) => {
         e.preventDefault()
         // Validar dados
-        if (email === '' || senha === '') {
-            toast.warn('Preencha todos os campos !')
-            return
-        }
+        if (email === '' || senha === '') return toast.warn('Preencha todos os campos !')
 
-        if (senha.length < 6) {
-            toast.warn('A senha precisa ter no mínimo 6 caracteres !')
-            return
-        }
+        if (senha.length < 6) return toast.warn('A senha precisa ter no mínimo 6 caracteres !')
 
         // Logar
         signInWithEmailAndPassword(auth, email, senha).then(() => {

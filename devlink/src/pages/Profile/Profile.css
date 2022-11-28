@@ -32,6 +32,14 @@
     font-size: 1.2em;
 }
 
+main.profile-links {
+    display: flex;
+    flex-direction: column;
+    max-width: 600px;
+    width: 90%;
+    text-align: center;
+}
+
 .title {
     color: #fff;
     margin: 10px 0 24px 0;
@@ -64,7 +72,7 @@
 }
 
 /* Links */
-.links .link-area {
+.profile-links .link-area {
     background-color: white;
     width: 100%;
     margin-bottom: 18px;
@@ -75,7 +83,7 @@
     transition: transform .4s;
 }
 
-.links .link-area:hover {
+.profile-links .link-area:hover {
     transform: scale(1.04);
 }
 

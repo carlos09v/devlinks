@@ -10,15 +10,14 @@ import './CreateAccount.css'
 const CreateAccount = () => {
   const navigate = useNavigate()
   const auth = getAuth()
+  const user = auth.currentUser
   // Navigate to Admin if Autenticated
   useEffect(() => {
-    onAuthStateChanged(auth, async (user) => {
       if (user?.uid) {
         toast.warn('Você está logado !')
         navigate('/admin')
       }
       
-    })
   }, [])
 
   const [userDataRegister, setUserDataRegister] = useState({ email: '', password: '', confirmPassword: '' })
@@ -28,20 +27,12 @@ const CreateAccount = () => {
     e.preventDefault()
 
     // Validar Dados
-    if (userDataRegister.email === '' || userDataRegister.password === '' || userDataRegister.confirmPassword === '') {
-      toast.warn('Preencha todos os campos!')
-      return
-    }
+    if (userDataRegister.email === '' || userDataRegister.password === '' || userDataRegister.confirmPassword === '') return toast.warn('Preencha todos os campos!')
 
-    if (userDataRegister.password.length < 6) {
-      toast.warn('A senha precisa ter no mínimo 6 caracteres !')
-      return
-    }
-
-    if (userDataRegister.password !== userDataRegister.confirmPassword) {
-      toast.warn('As senha não conferem !')
-      return
-    }
+    if (userDataRegister.password.length < 6) return toast.warn('A senha precisa ter no mínimo 6 caracteres !')
+    
+    if (userDataRegister.password !== userDataRegister.confirmPassword) return toast.warn('As senha não conferem !')
+    
 
     // Cadastrar Usuario no DB
     createUserWithEmailAndPassword(auth, userDataRegister.email, userDataRegister.password)

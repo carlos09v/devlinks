@@ -37,7 +37,7 @@ const router = createBrowserRouter([
   },
   {
     // Rota ñ esperada (Not Found)
-    path: '*',
+    path: '/*',
     element: <Error />
   }
 ])

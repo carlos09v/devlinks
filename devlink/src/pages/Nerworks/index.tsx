@@ -28,68 +28,63 @@ const Networks = () => {
     const auth = getAuth()
     const user = auth.currentUser
     useEffect(() => {
-        onAuthStateChanged(auth, async (user) => {
-            if (user?.uid) {
-                const uid = user.uid
-                setId(uid)
-            } else {
-                navigate('/error')
+        if (user?.uid) {
+            const uid = user.uid
+            setId(uid)
+        } else {
+            navigate('/error')
+        }
+
+        // Get UserData
+        function loadDataUser() {
+            if (user?.displayName || user?.photoURL) {
+                setNameUser(user.displayName)
+                setPhotoUser(user.photoURL)
             }
+        }
 
-            // Get UserData
-            function loadDataUser() {
-                if (user?.displayName || user?.photoURL) {
-                    setNameUser(user.displayName)
-                    setPhotoUser(user.photoURL)
-                }
-            }
-
-            // Get SocialLink
-            function getSocialLinks() {
-                const docRef = doc(db, `users/${user?.uid}/dataSocial/socialUrls`)
-                getDoc(docRef)
-                    .then((snapshot) => {
-                        if (snapshot.data() !== undefined) {
-                            setInstagram(snapshot.data()?.instagram)
-                            setTwitter(snapshot.data()?.twitter)
-                            setGitHub(snapshot.data()?.gitHub)
-                        }
-                    }).catch(err => {
-                        console.log(err)
-                    })
-            }
-
-
-            // Get Links
-            function getLinks() {
-                const linksRef = collection(db, `users/${user?.uid}/dataLinks`);
-                const queryRef = query(linksRef, orderBy("created", "asc"), limit(5));
-
-                // Watch Data Links
-                onSnapshot(queryRef, (snapshot) => {
-                    let lista: any = [];
-
-                    snapshot.forEach((doc: any) => {
-                        lista.push({
-                            id: doc.id,
-                            name: doc.data().name,
-                            url: doc.data().url,
-                            bg: doc.data().bg,
-                            color: doc.data().color
-                        })
-                    })
-
-                    setLinks(lista)
+        // Get SocialLink
+        function getSocialLinks() {
+            const docRef = doc(db, `users/${user?.uid}/dataSocial/socialUrls`)
+            getDoc(docRef)
+                .then((snapshot) => {
+                    if (snapshot.data() !== undefined) {
+                        setInstagram(snapshot.data()?.instagram)
+                        setTwitter(snapshot.data()?.twitter)
+                        setGitHub(snapshot.data()?.gitHub)
+                    }
+                }).catch(err => {
+                    console.log(err)
                 })
-            }
+        }
+
+        // Get Links
+        function getLinks() {
+            const linksRef = collection(db, `users/${user?.uid}/dataLinks`);
+            const queryRef = query(linksRef, orderBy("created", "asc"), limit(5));
+
+            // Watch Data Links
+            onSnapshot(queryRef, (snapshot) => {
+                let lista: any = [];
+
+                snapshot.forEach((doc: any) => {
+                    lista.push({
+                        id: doc.id,
+                        name: doc.data().name,
+                        url: doc.data().url,
+                        bg: doc.data().bg,
+                        color: doc.data().color
+                    })
+                })
+
+                setLinks(lista)
+            })
+        }
 
 
-            loadDataUser()
-            getSocialLinks()
-            getLinks()
-        })
-
-
+        loadDataUser()
+        getSocialLinks()
+        getLinks()
     }, [])
 
     // Salvar dados do usuário
@@ -120,20 +115,16 @@ const Networks = () => {
     function handleSaveLinks(e: FormEvent) {
         e.preventDefault()
 
-        // Qndo Autenticado
-        onAuthStateChanged(auth, async () => {
-
-            // Obs: Acabo de passar umas 4 horas pra descobrir q o caminho precisa ser par e eu estava passando 3 (Qual o sentido ????)
-            setDoc(doc(db, `users/${id}/dataSocial/socialUrls`), {
-                gitHub: gitHub,
-                instagram: instagram,
-                twitter: twitter
-            }).then(() => {
-                toast.success('Urls salvas com sucesso!')
-            }).catch(err => {
-                toast.error('Erro ao salvar Urls!')
-                console.log(err)
-            })
+        // Obs: Acabo de passar umas 4 horas pra descobrir q o caminho precisa ser par e eu estava passando 3 (Qual o sentido ????)
+        setDoc(doc(db, `users/${id}/dataSocial/socialUrls`), {
+            gitHub: gitHub,
+            instagram: instagram,
+            twitter: twitter
+        }).then(() => {
+            toast.success('Urls salvas com sucesso!')
+        }).catch(err => {
+            toast.error('Erro ao salvar Urls!')
+            console.log(err)
         })
     }
 

@@ -19,73 +19,69 @@ const Profile = () => {
     const navigate = useNavigate()
 
     const auth = getAuth()
+    const user = auth.currentUser
     useEffect(() => {
-        // Qndo Autenticado
-        onAuthStateChanged(auth, async (user) => {
-            if (user?.uid) {
-                const uid = user.uid
-                setId(uid)
-            } else {
-                navigate('/error')
-            }
+        if (user?.uid) {
+            const uid = user.uid
+            setId(uid)
+        } else {
+            navigate('/error')
+        }
 
-            // Get DataLinks
-            function getDataLinks() {
-                const linksRef = collection(db, `users/${user?.uid}/dataLinks`);
-                const queryRef = query(linksRef, orderBy("created", "asc"), limit(7));
+        // Get DataLinks
+        function getDataLinks() {
+            const linksRef = collection(db, `users/${user?.uid}/dataLinks`);
+            const queryRef = query(linksRef, orderBy("created", "asc"), limit(7));
 
-                // Get Data Links
-                getDocs(queryRef)
-                    .then((snapshot) => {
-                        let lista: any = [];
+            // Get Data Links
+            getDocs(queryRef)
+                .then((snapshot) => {
+                    let lista: any = [];
 
-                        snapshot.forEach((doc: any) => {
-                            lista.push({
-                                id: doc.id,
-                                name: doc.data().name,
-                                url: doc.data().url,
-                                bg: doc.data().bg,
-                                color: doc.data().color
-                            })
+                    snapshot.forEach((doc: any) => {
+                        lista.push({
+                            id: doc.id,
+                            name: doc.data().name,
+                            url: doc.data().url,
+                            bg: doc.data().bg,
+                            color: doc.data().color
                         })
-
-                        setLinks(lista)
                     })
+
+                    setLinks(lista)
+                })
+        }
+
+        // Get UserData
+        const getUserData = () => {
+            if (user?.displayName || user?.photoURL) {
+                setInfoUser({
+                    userName: user.displayName,
+                    userPhoto: user.photoURL
+                })
             }
+        }
 
-            // Get UserData
-            const getUserData = () => {
-                if (user?.displayName || user?.photoURL) {
-                    setInfoUser({
-                        userName: user.displayName,
-                        userPhoto: user.photoURL
-                    })
-                }
-            }
+        // Get SocialLinks
+        const getSocialLinks = () => {
+            const docRef = doc(db, `users/${user?.uid}/dataSocial/socialUrls`)
+            getDoc(docRef)
+                .then(snapshot => {
+                    if (snapshot.data() !== undefined) {
+                        setSocialLinks({
+                            instagram: snapshot.data()?.instagram,
+                            twitter: snapshot.data()?.twitter,
+                            gitHub: snapshot.data()?.gitHub
+                        })
+                    }
+                }).catch(err => {
+                    console.log(err)
+                })
+        }
 
-            // Get SocialLinks
-            const getSocialLinks = () => {
-                const docRef = doc(db, `users/${user?.uid}/dataSocial/socialUrls`)
-                getDoc(docRef)
-                    .then(snapshot => {
-                        if (snapshot.data() !== undefined) {
-                            setSocialLinks({
-                                instagram: snapshot.data()?.instagram,
-                                twitter: snapshot.data()?.twitter,
-                                gitHub: snapshot.data()?.gitHub
-                            })
-                        }
-                    }).catch(err => {
-                        console.log(err)
-                    })
-            }
-
-            getUserData()
-            getDataLinks()
-            getSocialLinks()
-        })
-
-
+        getUserData()
+        getDataLinks()
+        getSocialLinks()
     }, [])
 
 
@@ -104,7 +100,7 @@ const Profile = () => {
                     <Logo />
             }
 
-            <main className='links'>
+            <main className='profile-links'>
                 <h2 className='title'>Veja meus links abaixo 👇</h2>
                 {links.map((item: any) => (
                     <section

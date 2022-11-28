@@ -23,8 +23,8 @@ const Admin = () => {
 
   // Qndo o componente carregar, executa o useEffect
   const auth = getAuth()
+  const user = auth.currentUser
   useEffect(() => {
-    onAuthStateChanged(auth, async(user) => {
       if(user?.uid) {
         const uid = user.uid
         setId(uid)
@@ -32,7 +32,6 @@ const Admin = () => {
         navigate('/error')
       }
 
-    })
   }, [])
 
   // Enviar dados pro DB
